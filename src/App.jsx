@@ -1,80 +1,81 @@
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Reg from "./pages/Reg";
+import Login from "./pages/Login";
+import MainPage from "./components/MainPage";
+import { ProtectedRoute } from "protected-route-react";
+import { createContext } from "react";
 
+export const UserContext = createContext();
 
-import React, { useState, useEffect } from 'react';
-
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Reg from './pages/Reg';
-import Login from './pages/Login';
-import MainPage from './components/MainPage';
-import {ProtectedRoute} from "protected-route-react";
-import { createContext } from 'react';
-export const userContext= createContext();
 const App = () => {
+  const [count, setCount] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  useEffect(() => {
-    const storedEmail = localStorage.getItem('email');
-    const storedPassword = localStorage.getItem('password');
-    if (storedEmail && storedPassword) {
-      setIsAuthenticated(true);
-    }
-  }, []);
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
+  const handleIncrement = () => {
+    setCount((prevCount) => Math.min(prevCount + 1, 20)); // Limit increment to 20
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('email');
-    localStorage.removeItem('password');
+  const handleDecrement = () => {
+    setCount((prevCount) => Math.max(prevCount - 1, 0)); // Limit decrement to 0
+  };
+
+  const handleReset = () => {
+    setCount(0);
   };
 
   return (
     <Router>
-       
-      <Routes>
-       <userContext.Provider value={setIsAuthenticated}>
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute
-            isAuthenticated={!isAuthenticated}
-            redirect="/main"
-          >
-            <Login/>
-          </ProtectedRoute>
-        }
-      />
-     
-
-      <Route
-        path="/reg"
-        element={
-          <ProtectedRoute
-            isAuthenticated={!isAuthenticated}
-            redirect="/main"
-          >
-            <Reg/>
-          </ProtectedRoute>
-        }
-      />
-
-      <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-        <Route path="/main" element={<MainPage />} />
-      </Route>
-      </userContext.Provider>
-      </Routes>
+      <UserContext.Provider
+        value={{
+          count,
+          setIsAuthenticated,
+          handleIncrement,
+          handleDecrement,
+          handleReset,
+        }}
+      >
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute
+                isAuthenticated={!isAuthenticated}
+                redirect="/main"
+              >
+                <Reg />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute
+                isAuthenticated={!isAuthenticated}
+                redirect="/main"
+              >
+                <Login />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/main"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect="/">
+                <MainPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </UserContext.Provider>
     </Router>
   );
-
-  function PrivateRoute() {
-    return isAuthenticated ? <MainPage onLogout={handleLogout} /> : <Navigate to="/" />;
-  }
 };
 
 export default App;
-
-  // <ProtectedRoute isAuthenticated={}></ProtectedRoute>
-        // <Route path="/register" element={<Reg />} />
-        // <Route path="/" element={<Login onLogin={handleLogin} />} />
-        // <Route path="/main" element={<PrivateRoute />} />

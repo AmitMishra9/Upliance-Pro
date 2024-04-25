@@ -1,14 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { TextField, Button, Container, Typography, Link, makeStyles } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom';
-import { userContext } from '../App';
+import React, { useContext, useState } from "react";
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  Link,
+  makeStyles,
+} from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 const Login = () => {
-  const {setIsAuthenticated}= useContext(userContext);
+  const { setIsAuthenticated } = useContext(UserContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const handleChange = (event) => {
@@ -20,23 +27,23 @@ const Login = () => {
   };
 
   const handleSubmit = () => {
-    console.log('Login form submitted:', formData);
+    e.preventDefault();
+    const storedData = localStorage.getItem("userData");
 
-    const storedEmail = localStorage.getItem('email')?.trim();
-    const storedPassword = localStorage.getItem('password')?.trim();
-
-    console.log('Stored email:', storedEmail);
-    console.log('Stored password:', storedPassword);
-
-    if (storedEmail && storedPassword) {
-      if (formData.email.trim() === storedEmail && formData.password.trim() === storedPassword) {
-        console.log('Credentials match. Redirecting to main page...');
-         setIsAuthenticated(true);   
-        navigate('/main');
-
-      } 
+    if (!storedData) {
+      // Handle case when no user data is stored
+      return;
+    }
+    const userData = JSON.parse(storedData);
+    if (
+      formData.email === userData.email &&
+      formData.password === userData.password
+    ) {
+      // Redirect to home page or any other page upon successful login
+      setIsAuthenticated(true);
+      navigate("/main");
     } else {
-      console.log('Email or password not found in localStorage.');
+      console.error("Invalid Credentials");
     }
   };
 
@@ -69,12 +76,17 @@ const Login = () => {
             value={formData.password}
             onChange={handleChange}
           />
-          <Button variant="contained" color="primary" onClick={handleSubmit} className={classes.submitButton}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            className={classes.submitButton}
+          >
             Login
           </Button>
           <Typography variant="body2" className={classes.registerText}>
-            Don't have an account?{' '}
-            <Link href="/register" color="primary">
+            Don't have an account?{" "}
+            <Link href="/" color="primary">
               Register here
             </Link>
           </Typography>
@@ -86,16 +98,16 @@ const Login = () => {
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     marginTop: theme.spacing(8),
   },
   title: {
     marginBottom: theme.spacing(4),
   },
   form: {
-    width: '100%',
+    width: "100%",
     maxWidth: 400,
     padding: theme.spacing(3),
     border: `1px solid ${theme.palette.grey[300]}`,
@@ -107,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
   },
   registerText: {
     marginTop: theme.spacing(2),
-    textAlign: 'center',
+    textAlign: "center",
   },
 }));
 

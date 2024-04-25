@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import TextEditor from './TextEditor';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -49,7 +48,7 @@ const FormButton = styled.button`
   }
 `;
 
-const App = () => {
+const UserForm = () => {
   const [UserformData, setUserFormData] = useState({
     address: '',
     email: '',
@@ -63,9 +62,9 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Remove the existing data from the local storage
+    // Remove the existing data from local storage
     localStorage.removeItem('UserformData');
-    // Store the new data in the local storage
+    // Store the new data in local storage
     localStorage.setItem('UserformData', JSON.stringify(UserformData));
     // Reset the form data after saving
     setUserFormData({ address: '', email: '', phone: '' });
@@ -77,9 +76,7 @@ const App = () => {
     <>
       <GlobalStyle />
       <Container>
-        {showTextEditor ? (
-          <TextEditor />
-        ) : (
+       
           <FormContainer>
             <form onSubmit={handleSubmit}>
               <FormInput
@@ -106,10 +103,9 @@ const App = () => {
               <FormButton type="submit">Save</FormButton>
             </form>
           </FormContainer>
-        )}
       </Container>
     </>
   );
 };
 
-export default App;
+export default UserForm;

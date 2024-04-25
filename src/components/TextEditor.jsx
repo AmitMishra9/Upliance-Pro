@@ -65,10 +65,6 @@ const TextEditor = () => {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('UserformData', editorData);
-  }, [editorData]);
-
   const handleBold = () => {
     setIsBold(!isBold);
   };
@@ -79,6 +75,13 @@ const TextEditor = () => {
 
   const handleItalic = () => {
     setIsItalic(!isItalic);
+  };
+
+  const handleGetData = () => {
+    const storedData = localStorage.getItem('UserformData');
+    if (storedData) {
+      setEditorData(storedData);
+    }
   };
 
   return (
@@ -94,6 +97,7 @@ const TextEditor = () => {
           <Button onClick={handleBold}>🅱️ Bold</Button>
           <Button onClick={handleUnderline}>🆄 Underline</Button>
           <Button onClick={handleItalic}>🅸 Italic</Button>
+          <Button onClick={handleGetData}>Get Data</Button>
         </ButtonContainer>
       </TextEditorContainer>
     </>

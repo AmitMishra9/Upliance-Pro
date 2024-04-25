@@ -1,37 +1,38 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Box, Typography } from '@material-ui/core';
-import { useSpring, animated } from 'react-spring';
+import { useContext } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button, Box, Typography } from "@material-ui/core";
+
+import { UserContext } from "../App";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     padding: theme.spacing(3),
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#fff3e0",
     borderRadius: theme.spacing(2),
   },
   counter: {
-    fontSize: '3rem',
-    fontWeight: 'bold',
+    fontSize: "2rem",
+    fontWeight: "bold",
     marginBottom: theme.spacing(2),
   },
   progressBar: {
     height: theme.spacing(1),
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     borderRadius: theme.spacing(0.5),
-    overflow: 'hidden',
-    width: '100%',
+    overflow: "hidden",
+    width: "100%",
     maxWidth: 400,
   },
   progress: {
-    height: '100%',
-    backgroundColor: '#4caf50',
+    height: "100%",
+    backgroundColor: "#4caf50",
   },
   buttonGroup: {
-    display: 'flex',
-    justifyContent: 'center',
+    display: "flex",
+    justifyContent: "center",
     marginTop: theme.spacing(2),
   },
   button: {
@@ -40,37 +41,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CounterApp = () => {
+  const { count, handleIncrement, handleDecrement, handleReset } =
+    useContext(UserContext);
   const classes = useStyles();
-  const [count, setCount] = useState(0);
   const maxCount = 20;
   const minCount = 0;
-
-  const progress = useSpring({
-    width: `${((count - minCount) / (maxCount - minCount)) * 100}%`,
-    config: { mass: 1, tension: 200, friction: 20 },
-  });
-
-  const handleIncrement = () => {
-    setCount((prevCount) => Math.min(prevCount + 1, maxCount));
-  };
-
-  const handleDecrement = () => {
-    setCount((prevCount) => Math.max(prevCount - 1, minCount));
-  };
-
-  const handleReset = () => {
-    setCount(0);
-  };
 
   return (
     <Box className={classes.root}>
       <Typography variant="h4" component="h1">
-        Counter App
       </Typography>
-      <Typography className={classes.counter}>{count}</Typography>
-      <Box className={classes.progressBar}>
-        <animated.div className={classes.progress} style={progress} />
-      </Box>
+      <Typography className={classes.counter}><h1>{count}</h1></Typography>
+
       <Box className={classes.buttonGroup}>
         <Button
           variant="contained"

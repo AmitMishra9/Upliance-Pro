@@ -1,14 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { TextField, Button, Container, Typography, makeStyles } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { userContext } from '../App';
+import React, { useContext, useState } from "react";
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 const Reg = () => {
-  const  {setIsAuthenticated}= useContext(userContext);
+  const { setIsAuthenticated } = useContext(UserContext);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
 
   const handleChange = (event) => {
@@ -19,13 +26,10 @@ const Reg = () => {
   };
 
   const handleSubmit = () => {
-    localStorage.setItem('email', formData.email.trim());
-    localStorage.setItem('password', formData.password.trim());
-    console.log('Form data stored:', formData);
+    localStorage.setItem("userData", JSON.stringify(formData));
     setIsAuthenticated(true);
-    window.location.href = '/main';
+    navigate("/main");
   };
-
   const classes = useStyles();
 
   return (
@@ -73,7 +77,7 @@ const Reg = () => {
             Submit
           </Button>
           <Typography variant="body2" className={classes.loginText}>
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link to="/" color="primary">
               Login here
             </Link>
@@ -86,13 +90,13 @@ const Reg = () => {
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     marginTop: theme.spacing(8),
   },
   form: {
-    width: '100%',
+    width: "100%",
     maxWidth: 400,
     padding: theme.spacing(3),
     border: `1px solid ${theme.palette.grey[300]}`,
@@ -101,15 +105,15 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginBottom: theme.spacing(4),
-    textAlign: 'center',
+    textAlign: "center",
   },
   submitButton: {
     marginTop: theme.spacing(2),
-    width: '100%',
+    width: "100%",
   },
   loginText: {
     marginTop: theme.spacing(2),
-    textAlign: 'center',
+    textAlign: "center",
   },
 }));
 
