@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Reg from "./pages/Reg";
 import Login from "./pages/Login";
 import MainPage from "./components/MainPage";
@@ -17,12 +12,19 @@ const App = () => {
   const [count, setCount] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      setIsAuthenticated(true);
+    }
+  },[]);
+
   const handleIncrement = () => {
-    setCount((prevCount) => Math.min(prevCount + 1, 20)); // Limit increment to 20
+    setCount((prevCount) => Math.min(prevCount + 1, 20));
   };
 
   const handleDecrement = () => {
-    setCount((prevCount) => Math.max(prevCount - 1, 0)); // Limit decrement to 0
+    setCount((prevCount) => Math.max(prevCount - 1, 0));
   };
 
   const handleReset = () => {
@@ -44,10 +46,7 @@ const App = () => {
           <Route
             path="/"
             element={
-              <ProtectedRoute
-                isAuthenticated={!isAuthenticated}
-                redirect="/main"
-              >
+              <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/main">
                 <Reg />
               </ProtectedRoute>
             }
@@ -55,10 +54,7 @@ const App = () => {
           <Route
             path="/login"
             element={
-              <ProtectedRoute
-                isAuthenticated={!isAuthenticated}
-                redirect="/main"
-              >
+              <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/main">
                 <Login />
               </ProtectedRoute>
             }
@@ -71,7 +67,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to={isAuthenticated ? "/main" : "/"} />} />
         </Routes>
       </UserContext.Provider>
     </Router>

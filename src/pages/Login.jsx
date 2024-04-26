@@ -26,15 +26,17 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = () => {
-    e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault(); 
     const storedData = localStorage.getItem("userData");
-
     if (!storedData) {
-      // Handle case when no user data is stored
+     
+      console.error("No user data found in localStorage");
       return;
     }
+  
     const userData = JSON.parse(storedData);
+  
     if (
       formData.email === userData.email &&
       formData.password === userData.password
@@ -46,7 +48,6 @@ const Login = () => {
       console.error("Invalid Credentials");
     }
   };
-
   const classes = useStyles();
 
   return (

@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Box, Typography } from "@material-ui/core";
-
 import { UserContext } from "../App";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -49,10 +49,10 @@ const CounterApp = () => {
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h4" component="h1">
+      <Typography variant="h4" component="h1"></Typography>
+      <Typography className={classes.counter}>
+        <h1>{count}</h1>
       </Typography>
-      <Typography className={classes.counter}><h1>{count}</h1></Typography>
-
       <Box className={classes.buttonGroup}>
         <Button
           variant="contained"
@@ -80,7 +80,8 @@ const CounterApp = () => {
         >
           Reset
         </Button>
-      </Box>
+        
+      </Box> 
     </Box>
   );
 };

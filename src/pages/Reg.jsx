@@ -7,10 +7,10 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../App";
+//import { UserContext } from "../App";
 
 const Reg = () => {
-  const { setIsAuthenticated } = useContext(UserContext);
+ // const { setIsAuthenticated } = useContext(UserContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -26,9 +26,13 @@ const Reg = () => {
   };
 
   const handleSubmit = () => {
+    if (!formData.name || !formData.email || !formData.password) {
+      alert("Please fill in all the fields");
+      return;
+    }
     localStorage.setItem("userData", JSON.stringify(formData));
-    setIsAuthenticated(true);
-    navigate("/main");
+    //setIsAuthenticated(true);
+    navigate("/login");
   };
   const classes = useStyles();
 
@@ -78,7 +82,7 @@ const Reg = () => {
           </Button>
           <Typography variant="body2" className={classes.loginText}>
             Already have an account?{" "}
-            <Link to="/" color="primary">
+            <Link to="/login" color="primary">
               Login here
             </Link>
           </Typography>
